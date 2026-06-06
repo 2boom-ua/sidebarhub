@@ -1,0 +1,403 @@
+<!-- Sidebar Hub - Chrome/Edge Extension -->
+<!-- Copyright 2boom, 2026 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Sidebar Hub - Options</title>
+
+<style>
+/* === GLOBAL VARIABLES (LIGHT THEME DEFAULT) === */
+:root {
+    --bg-body: #ffffff;
+    --bg-card: #f5f5f5;
+    --bg-input: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --border-card: #d0d0d0;
+    --border-input: #c0c0c0;
+    --border-input-focus: #5c9eff;
+    --shadow-focus: rgba(92, 158, 255, 0.2);
+    --radius-card: 8px;
+    --radius-input: 4px;
+    --radius-button: 4px;
+    
+    --btn-red: #fb7185;
+    --btn-red-hover: #f43f5e;
+    --btn-green: #a8cf83;
+    --btn-green-hover: #7fb65c;
+    --btn-blue: #60a5fa;
+    --btn-blue-hover: #3b82f6;
+    --btn-grey: #94a3b8;
+    --btn-grey-hover: #64748b;
+    --btn-purple: #c084fc;
+    --btn-purple-hover: #a855f7;
+    --btn-orange: #fdba74;
+    --btn-orange-hover: #fb923c;
+}
+
+/* === DARK THEME === */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-body: #1e1e1e;
+        --bg-card: #2b2b2b;
+        --bg-input: #333333;
+        --text-primary: #cccccc;
+        --text-secondary: #aaaaaa;
+        --border-card: #444444;
+        --border-input: #555555;
+        --border-input-focus: #6ea8fe;
+        --shadow-focus: rgba(110, 168, 254, 0.25);
+        --radius-card: 8px;
+        --radius-input: 4px;
+        --radius-button: 6px;
+        
+        --btn-red: #fb7185;
+        --btn-red-hover: #f43f5e;
+        --btn-green: #a8cf83;
+        --btn-green-hover: #7fb65c;
+        --btn-blue: #60a5fa;
+        --btn-blue-hover: #3b82f6;
+        --btn-grey: #94a3b8;
+        --btn-grey-hover: #64748b;
+        --btn-purple: #c084fc;
+        --btn-purple-hover: #a855f7;
+        --btn-orange: #fdba74;
+        --btn-orange-hover: #fb923c;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    background: var(--bg-body);
+    color: var(--text-primary);
+    height: 100%;
+    overflow-y: auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-card);
+}
+
+h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    color: var(--text-secondary);
+}
+
+.close-btn {
+    background: var(--btn-grey);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.close-btn:hover {
+    background: var(--btn-grey-hover);
+}
+
+.add-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.add-form h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-input);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border-radius: var(--radius-input);
+    font-size: 12px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: var(--border-input-focus);
+    box-shadow: 0 0 0 2px var(--shadow-focus);
+}
+
+.add-btn {
+    background: var(--btn-blue);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 12px;
+    width: 100%;
+}
+
+.add-btn:hover {
+    background: var(--btn-blue-hover);
+}
+
+.sites-list {
+    margin-bottom: 24px;
+}
+
+.sites-list h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 32px;
+    color: var(--text-secondary);
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border-card);
+    font-size: 12px;
+}
+
+.site-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.site-info {
+    flex: 1;
+    overflow: hidden;
+}
+
+.site-name {
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.site-url {
+    font-size: 10px;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.site-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn {
+    background: var(--btn-green);
+    border: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 11px;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: var(--btn-green-hover);
+}
+
+.delete-btn {
+    background: var(--btn-red);
+    border: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 11px;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: var(--btn-red-hover);
+}
+
+.danger-zone {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-card);
+}
+
+.clear-all-btn {
+    background: var(--btn-red);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 11px;
+    width: 100%;
+}
+
+.clear-all-btn:hover {
+    background: var(--btn-red-hover);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 20px;
+    max-width: 280px;
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0 0 16px 0;
+    font-size: 13px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-buttons button {
+    padding: 6px 16px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.modal-confirm {
+    background: var(--btn-red);
+    border: none;
+    color: white;
+}
+
+.modal-confirm:hover {
+    background: var(--btn-red-hover);
+}
+
+.modal-cancel {
+    background: var(--btn-grey);
+    border: none;
+    color: white;
+}
+
+.modal-cancel:hover {
+    background: var(--btn-grey-hover);
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    color: var(--text-primary);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    z-index: 1001;
+    animation: fadeOut 2s ease forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; visibility: hidden; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>Site Manager</h2>
+    <button class="close-btn" id="closeBtn">Close</button>
+</div>
+
+<div class="add-form">
+    <h3>Add New Site</h3>
+    <div class="form-group">
+        <label>Site Name</label>
+        <input type="text" id="siteName" placeholder="e.g., GitHub">
+    </div>
+    <div class="form-group">
+        <label>URL</label>
+        <input type="text" id="siteUrl" placeholder="https://...">
+    </div>
+    <button class="add-btn" id="addBtn">Add Site</button>
+</div>
+
+<div class="sites-list">
+    <h3>Your Sites</h3>
+    <div id="sitesContainer"></div>
+</div>
+
+<div class="danger-zone">
+    <button class="clear-all-btn" id="clearAllBtn">Delete All Sites</button>
+</div>
+
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <p id="modalMessage">Are you sure?</p>
+        <div class="modal-buttons">
+            <button class="modal-confirm" id="modalConfirm">Yes</button>
+            <button class="modal-cancel" id="modalCancel">No</button>
+        </div>
+    </div>
+</div>
+
+<script src="config.js"></script>
+
+</body>
+</html>
