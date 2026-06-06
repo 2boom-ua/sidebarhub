@@ -19,12 +19,6 @@ A lightweight Chrome/Edge extension that lets you open your favorite websites in
 
 ---
 
-## Screenshots
-
-> _Add screenshots here once available._
-
----
-
 ## Installation
 
 ### From source (Developer Mode)
