@@ -3,7 +3,7 @@
 A lightweight Chrome/Edge extension that lets you open your favorite websites in the browser's built-in side panel — keeping them accessible without taking up a tab.
 
 ![Manifest Version](https://img.shields.io/badge/Manifest-v3-blue)
-![License](https://img.shields.io/badge/license-Copyright%202boom%202026-lightgrey)
+[![License](https://img.shields.io/badge/license-GPLv3-red.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
 
@@ -110,4 +110,5 @@ All data is stored locally using `chrome.storage.local`. Nothing is sent to any 
 
 ## License
 
-Copyright © 2boom, 2026. All rights reserved.
+GPL v3 or later  
+https://www.gnu.org/licenses/gpl-3.0.html
