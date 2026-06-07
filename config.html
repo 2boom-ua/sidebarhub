@@ -51,7 +51,7 @@
         --shadow-focus: rgba(110, 168, 254, 0.25);
         --radius-card: 8px;
         --radius-input: 4px;
-        --radius-button: 6px;
+        --radius-button: 4px;
         
         --btn-red: #fb7185;
         --btn-red-hover: #f43f5e;
@@ -75,6 +75,7 @@
 body {
     margin: 0;
     padding: 16px;
+    padding-bottom: 60px;
     font-family: Arial, sans-serif;
     background: var(--bg-body);
     color: var(--text-primary);
@@ -271,6 +272,74 @@ h2 {
     background: var(--btn-red-hover);
 }
 
+.backup-section {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-card);
+}
+
+.backup-section h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+}
+
+.backup-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.export-btn {
+    background: var(--btn-blue);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 12px;
+    flex: 1;
+}
+
+.export-btn:hover {
+    background: var(--btn-blue-hover);
+}
+
+.import-btn {
+    background: var(--btn-orange);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    font-size: 12px;
+    flex: 1;
+}
+
+.import-btn:hover {
+    background: var(--btn-orange-hover);
+}
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-body);
+    padding: 10px 16px;
+    border-top: none;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-secondary);
+    z-index: 100;
+    opacity: 0.7;
+    font-weight: 300;
+}
+
+.footer strong {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -337,7 +406,7 @@ h2 {
 
 .toast {
     position: fixed;
-    bottom: 20px;
+    bottom: 60px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--bg-card);
@@ -387,6 +456,18 @@ h2 {
     <button class="clear-all-btn" id="clearAllBtn">Delete All Sites</button>
 </div>
 
+<div class="backup-section">
+    <h3>Backup & Restore</h3>
+    <div class="backup-buttons">
+        <button class="export-btn" id="exportBtn">Export</button>
+        <button class="import-btn" id="importBtn">Import</button>
+    </div>
+</div>
+
+<div class="footer">
+    <span><strong>Sidebar Hub</strong>, &copy; 2boom, 2026.</span>
+</div>
+
 <div id="confirmModal" class="modal">
     <div class="modal-content">
         <p id="modalMessage">Are you sure?</p>
@@ -396,6 +477,8 @@ h2 {
         </div>
     </div>
 </div>
+
+<input type="file" id="fileInput" accept=".json" style="display: none;">
 
 <script src="config.js"></script>
 

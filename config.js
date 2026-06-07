@@ -8,6 +8,9 @@ const addBtn = document.getElementById("addBtn");
 const sitesContainer = document.getElementById("sitesContainer");
 const closeBtn = document.getElementById("closeBtn");
 const clearAllBtn = document.getElementById("clearAllBtn");
+const exportBtn = document.getElementById("exportBtn");
+const importBtn = document.getElementById("importBtn");
+const fileInput = document.getElementById("fileInput");
 
 // Modal elements
 const modal = document.getElementById("confirmModal");
@@ -222,6 +225,112 @@ function clearAllSites() {
     });
 }
 
+// ========== EXPORT SITES ==========
+function exportSites() {
+    if (sites.length === 0) {
+        showToast("No sites to export");
+        return;
+    }
+    
+    const exportData = {
+        version: "1.0",
+        exportDate: new Date().toISOString(),
+        sites: sites
+    };
+    
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `sidebar-hub-backup-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast(`Exported ${sites.length} sites`);
+}
+
+// ========== IMPORT SITES ==========
+function importSites(file) {
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+        try {
+            const data = JSON.parse(event.target.result);
+            
+            // Validate structure
+            if (!data.sites || !Array.isArray(data.sites)) {
+                showToast("Invalid backup file: missing sites array");
+                return;
+            }
+            
+            // Validate each site
+            let validSites = true;
+            for (const site of data.sites) {
+                if (!site.name || !site.url) {
+                    validSites = false;
+                    break;
+                }
+                if (!isValidUrl(site.url)) {
+                    validSites = false;
+                    break;
+                }
+            }
+            
+            if (!validSites) {
+                showToast("Invalid backup file: each site must have name and valid URL");
+                return;
+            }
+            
+            const newSites = data.sites;
+            
+            showModal(`Import will replace your current ${sites.length} sites with ${newSites.length} sites. Are you sure?`, () => {
+                sites = newSites;
+                saveSites();
+                showToast(`Imported ${sites.length} sites`);
+                
+                if (sites.length === 0) {
+                    window.parent.postMessage({
+                        type: "sitesUpdated",
+                        data: { sites: [] }
+                    }, "*");
+                }
+            });
+            
+        } catch (e) {
+            showToast("Invalid backup file: not a valid JSON");
+        }
+    };
+    
+    reader.onerror = () => {
+        showToast("Error reading file");
+    };
+    
+    reader.readAsText(file);
+}
+
+// ========== HANDLE IMPORT BUTTON CLICK ==========
+function onImportClick() {
+    fileInput.click();
+}
+
+// ========== HANDLE FILE SELECTION ==========
+function onFileSelected(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    if (!file.name.endsWith(".json")) {
+        showToast("Please select a JSON file");
+        return;
+    }
+    
+    importSites(file);
+    fileInput.value = "";
+}
+
 // ========== RENDER SITES LIST ==========
 function renderSitesList() {
     if (sites.length === 0) {
@@ -287,6 +396,9 @@ async function init() {
 addBtn.addEventListener("click", addSite);
 closeBtn.addEventListener("click", closeConfig);
 clearAllBtn.addEventListener("click", clearAllSites);
+exportBtn.addEventListener("click", exportSites);
+importBtn.addEventListener("click", onImportClick);
+fileInput.addEventListener("change", onFileSelected);
 
 siteNameInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") addSite();
