@@ -74,6 +74,7 @@ sidebar-hub/
     ├── icon-32.png
     ├── icon-48.png
     └── icon-128.png
+    └── link.svg
 ```
 
 ---
