@@ -22,7 +22,15 @@
     --border-select-focus: #5c9eff;
     --radius-select: 4px;
     --radius-select-option: 4px;
+    --radius-button: 4px;
     --shadow-focus: rgba(92, 158, 255, 0.2);
+    
+    /* Icon filter - light theme (black icon) */
+    --icon-filter: brightness(0) saturate(100%) invert(0%);
+    
+    /* Button colors */
+    --btn-grey: #94a3b8;
+    --btn-grey-hover: #64748b;
     
     /* Loading & Error */
     --overlay-bg: rgba(255, 255, 255, 0.95);
@@ -30,6 +38,10 @@
     --error-bg: #fff5f5;
     --error-text: #d32f2f;
     --error-border: #ffcdd2;
+    
+    /* Tooltip */
+    --tooltip-bg: #333333;
+    --tooltip-text: #ffffff;
 }
 
 /* === DARK THEME === */
@@ -47,7 +59,15 @@
         --border-select-focus: #6ea8fe;
         --radius-select: 4px;
         --radius-select-option: 4px;
+        --radius-button: 4px;
         --shadow-focus: rgba(110, 168, 254, 0.25);
+        
+        /* Icon filter - dark theme (white icon) */
+        --icon-filter: brightness(0) saturate(100%) invert(100%);
+        
+        /* Button colors */
+        --btn-grey: #94a3b8;
+        --btn-grey-hover: #64748b;
         
         /* Loading & Error */
         --overlay-bg: rgba(30, 30, 30, 0.95);
@@ -55,6 +75,10 @@
         --error-bg: #2c1a1a;
         --error-text: #ff9e8f;
         --error-border: #5c2e2e;
+        
+        /* Tooltip */
+        --tooltip-bg: #555555;
+        --tooltip-text: #ffffff;
     }
 }
 
@@ -76,10 +100,13 @@ body {
     padding: 6px;
     border-bottom: 1px solid var(--border-toolbar);
     background: var(--bg-toolbar);
+    display: flex;
+    gap: 6px;
+    align-items: center;
 }
 
 #siteSelect {
-    width: 100%;
+    flex: 1;
     height: 32px;
     border: 1px solid var(--border-select);
     background: var(--bg-select);
@@ -101,6 +128,86 @@ body {
 
 #siteSelect option {
     border-radius: var(--radius-select-option);
+}
+
+/* New Tab Button */
+.new-tab-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-button);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.new-tab-btn img {
+    width: 16px;
+    height: 16px;
+    filter: var(--icon-filter);
+    opacity: 0.7;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.new-tab-btn:hover img {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.new-tab-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.new-tab-btn.disabled:hover img {
+    transform: none;
+    opacity: 0.7;
+}
+
+/* Custom Tooltip - BOTTOM position, shifted LEFT by 45px */
+.new-tab-btn[data-tooltip] {
+    position: relative;
+}
+
+.new-tab-btn[data-tooltip]:hover::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: 130%;
+    left: calc(50% - 45px);
+    transform: translateX(-50%);
+    background: var(--tooltip-bg);
+    color: var(--tooltip-text);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    font-weight: normal;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.new-tab-btn[data-tooltip]:hover::after {
+    content: '';
+    position: absolute;
+    top: 118%;
+    left: calc(50% - 45px);
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent transparent var(--tooltip-bg) transparent;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* Disabled button - no tooltip */
+.new-tab-btn.disabled[data-tooltip]:hover::before,
+.new-tab-btn.disabled[data-tooltip]:hover::after {
+    display: none;
 }
 
 #contentContainer {
@@ -254,6 +361,9 @@ body {
 
 <div id="toolbar">
     <select id="siteSelect"></select>
+    <button class="new-tab-btn" id="newTabBtn" data-tooltip="Open in new tab">
+        <img src="icons/link.svg" alt="Open in new tab">
+    </button>
 </div>
 
 <div id="contentContainer">

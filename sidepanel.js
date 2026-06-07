@@ -9,6 +9,7 @@ const loadingOverlay = document.getElementById("loadingOverlay");
 const errorOverlay = document.getElementById("errorOverlay");
 const errorMessage = document.getElementById("errorMessage");
 const retryButton = document.getElementById("retryButton");
+const newTabBtn = document.getElementById("newTabBtn");
 
 // State
 let currentUrl = "";
@@ -74,6 +75,26 @@ function saveConfigModeState(isConfig) {
     isConfigMode = isConfig;
 }
 
+// ========== UPDATE NEW TAB BUTTON STATE ==========
+function updateNewTabButton() {
+    if (isConfigMode || !currentUrl || currentUrl === "about:blank") {
+        newTabBtn.classList.add("disabled");
+        newTabBtn.setAttribute("data-tooltip", "");
+    } else {
+        newTabBtn.classList.remove("disabled");
+        newTabBtn.setAttribute("data-tooltip", "Open in new tab");
+    }
+}
+
+// ========== OPEN CURRENT SITE IN NEW TAB ==========
+function openInNewTab() {
+    if (isConfigMode) return;
+    if (!currentUrl || currentUrl === "about:blank") return;
+    if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) return;
+    
+    chrome.tabs.create({ url: currentUrl, active: true });
+}
+
 // ========== BUILD DROPDOWN ==========
 async function buildDropdown() {
     const sites = await loadSitesFromStorage();
@@ -108,12 +129,14 @@ function loadUrlInFrame(url) {
     
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
         showError("Invalid URL format");
+        updateNewTabButton();
         return;
     }
     
     currentUrl = url;
     hideError();
     showLoading();
+    updateNewTabButton();
     
     let slowLoadWarningTimer = setTimeout(() => {
         const loadingText = document.querySelector(".loading-text");
@@ -126,6 +149,7 @@ function loadUrlInFrame(url) {
         clearTimeout(slowLoadWarningTimer);
         if (!loadingOverlay.classList.contains("hidden")) {
             showError("Connection timeout. The server is not responding. Check your internet connection or try again later.");
+            updateNewTabButton();
         }
     }, LOAD_TIMEOUT_MS);
     
@@ -136,6 +160,7 @@ function loadUrlInFrame(url) {
 function onFrameLoad() {
     clearTimeout(loadTimeout);
     hideLoading();
+    updateNewTabButton();
     
     const loadingText = document.querySelector(".loading-text");
     if (loadingText) loadingText.textContent = "Loading...";
@@ -148,6 +173,7 @@ function onFrameLoad() {
 function onFrameError() {
     clearTimeout(loadTimeout);
     hideLoading();
+    updateNewTabButton();
     
     let errorMsg = "Failed to load the page.";
     
@@ -184,6 +210,7 @@ function showIframe(url) {
     
     loadUrlInFrame(url);
     select.value = url;
+    updateNewTabButton();
 }
 
 // ========== SHOW CONFIGURATOR ==========
@@ -211,6 +238,7 @@ function showConfigurator() {
     saveConfigModeState(true);
     
     select.value = "__config__";
+    updateNewTabButton();
     
     window.addEventListener("message", handleConfigMessage);
 }
@@ -275,6 +303,7 @@ async function closeConfigAndShowSite(siteUrl) {
     
     isConfigMode = false;
     saveConfigModeState(false);
+    updateNewTabButton();
     window.addEventListener("message", handleConfigMessage);
 }
 
@@ -295,6 +324,13 @@ select.addEventListener("change", async () => {
     }
 });
 
+// ========== NEW TAB BUTTON CLICK ==========
+newTabBtn.addEventListener("click", () => {
+    if (!newTabBtn.classList.contains("disabled")) {
+        openInNewTab();
+    }
+});
+
 // ========== RETRY BUTTON ==========
 retryButton.addEventListener("click", () => {
     retryLoad();
@@ -306,12 +342,14 @@ window.addEventListener("online", () => {
     if (!isConfigMode && frame.src === "about:blank") {
         retryLoad();
     }
+    updateNewTabButton();
 });
 
 window.addEventListener("offline", () => {
     if (!isConfigMode) {
         showError("No internet connection. Please check your network and try again.");
     }
+    updateNewTabButton();
 });
 
 // ========== IFRAME EVENT LISTENERS ==========
