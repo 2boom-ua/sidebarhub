@@ -40,8 +40,8 @@
     --error-border: #ffcdd2;
     
     /* Tooltip */
-    --tooltip-bg: #333333;
-    --tooltip-text: #ffffff;
+    --tooltip-bg: #ffffff;
+    --tooltip-text: #333333;
 }
 
 /* === DARK THEME === */
@@ -168,7 +168,7 @@ body {
     opacity: 0.7;
 }
 
-/* Custom Tooltip - BOTTOM position, shifted LEFT by 45px */
+/* Custom Tooltip - BOTTOM position, shifted LEFT by 45px, no arrow */
 .new-tab-btn[data-tooltip] {
     position: relative;
 }
@@ -176,7 +176,7 @@ body {
 .new-tab-btn[data-tooltip]:hover::before {
     content: attr(data-tooltip);
     position: absolute;
-    top: 130%;
+    top: 129%;
     left: calc(50% - 45px);
     transform: translateX(-50%);
     background: var(--tooltip-bg);
@@ -191,17 +191,9 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.new-tab-btn[data-tooltip]:hover::after {
-    content: '';
-    position: absolute;
-    top: 118%;
-    left: calc(50% - 45px);
-    transform: translateX(-50%);
-    border-width: 4px;
-    border-style: solid;
-    border-color: transparent transparent var(--tooltip-bg) transparent;
-    z-index: 1000;
-    pointer-events: none;
+/* Disabled button - no tooltip */
+.new-tab-btn.disabled[data-tooltip]:hover::before {
+    display: none;
 }
 
 /* Disabled button - no tooltip */
