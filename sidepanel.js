@@ -26,32 +26,6 @@ const STORAGE_CONFIG_MODE = "isConfigMode";
 const LOAD_TIMEOUT_MS = 15000;
 const SLOW_LOAD_WARNING_MS = 5000;
 
-// ========== LOADING FUNCTIONS ==========
-function showLoading() {
-    clearTimeout(loadTimeout);
-    loadingOverlay.classList.remove("hidden");
-    hideError();
-}
-
-function hideLoading() {
-    loadingOverlay.classList.add("hidden");
-    clearTimeout(loadTimeout);
-    
-    const loadingText = document.querySelector(".loading-text");
-    if (loadingText) loadingText.textContent = "Loading...";
-}
-
-// ========== ERROR FUNCTIONS ==========
-function showError(message) {
-    hideLoading();
-    errorMessage.textContent = message;
-    errorOverlay.classList.remove("hidden");
-}
-
-function hideError() {
-    errorOverlay.classList.add("hidden");
-}
-
 // ========== LOAD SITES FROM STORAGE ==========
 async function loadSitesFromStorage() {
     return new Promise((resolve) => {
@@ -156,6 +130,32 @@ function loadUrlInFrame(url) {
     frame.src = url;
 }
 
+// ========== SHOW LOADING ==========
+function showLoading() {
+    clearTimeout(loadTimeout);
+    loadingOverlay.classList.remove("hidden");
+    hideError();
+}
+
+function hideLoading() {
+    loadingOverlay.classList.add("hidden");
+    clearTimeout(loadTimeout);
+    
+    const loadingText = document.querySelector(".loading-text");
+    if (loadingText) loadingText.textContent = "Loading...";
+}
+
+// ========== SHOW/HIDE ERROR ==========
+function showError(message) {
+    hideLoading();
+    errorMessage.textContent = message;
+    errorOverlay.classList.remove("hidden");
+}
+
+function hideError() {
+    errorOverlay.classList.add("hidden");
+}
+
 // ========== IFRAME EVENT HANDLERS ==========
 function onFrameLoad() {
     clearTimeout(loadTimeout);
@@ -190,7 +190,6 @@ function onFrameError() {
     }, 100);
 }
 
-// ========== RETRY FUNCTION ==========
 function retryLoad() {
     if (currentUrl && !isConfigMode) {
         loadUrlInFrame(currentUrl);
@@ -307,7 +306,7 @@ async function closeConfigAndShowSite(siteUrl) {
     window.addEventListener("message", handleConfigMessage);
 }
 
-// ========== HANDLE DROPDOWN CHANGE ==========
+// ========== EVENT LISTENERS ==========
 select.addEventListener("change", async () => {
     const selectedValue = select.value;
     
@@ -324,19 +323,16 @@ select.addEventListener("change", async () => {
     }
 });
 
-// ========== NEW TAB BUTTON CLICK ==========
 newTabBtn.addEventListener("click", () => {
     if (!newTabBtn.classList.contains("disabled")) {
         openInNewTab();
     }
 });
 
-// ========== RETRY BUTTON ==========
 retryButton.addEventListener("click", () => {
     retryLoad();
 });
 
-// ========== ONLINE/OFFLINE DETECTION ==========
 window.addEventListener("online", () => {
     hideError();
     if (!isConfigMode && frame.src === "about:blank") {
@@ -352,7 +348,6 @@ window.addEventListener("offline", () => {
     updateNewTabButton();
 });
 
-// ========== IFRAME EVENT LISTENERS ==========
 frame.addEventListener("load", onFrameLoad);
 frame.addEventListener("error", onFrameError);
 

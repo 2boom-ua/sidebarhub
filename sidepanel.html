@@ -176,7 +176,7 @@ body {
 .new-tab-btn[data-tooltip]:hover::before {
     content: attr(data-tooltip);
     position: absolute;
-    top: 129%;
+    top: 130%;
     left: calc(50% - 45px);
     transform: translateX(-50%);
     background: var(--tooltip-bg);
@@ -193,12 +193,6 @@ body {
 
 /* Disabled button - no tooltip */
 .new-tab-btn.disabled[data-tooltip]:hover::before {
-    display: none;
-}
-
-/* Disabled button - no tooltip */
-.new-tab-btn.disabled[data-tooltip]:hover::before,
-.new-tab-btn.disabled[data-tooltip]:hover::after {
     display: none;
 }
 

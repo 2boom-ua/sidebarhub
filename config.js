@@ -261,13 +261,11 @@ function importSites(file) {
         try {
             const data = JSON.parse(event.target.result);
             
-            // Validate structure
             if (!data.sites || !Array.isArray(data.sites)) {
                 showToast("Invalid backup file: missing sites array");
                 return;
             }
             
-            // Validate each site
             let validSites = true;
             for (const site of data.sites) {
                 if (!site.name || !site.url) {
