@@ -10,6 +10,7 @@ const errorOverlay = document.getElementById("errorOverlay");
 const errorMessage = document.getElementById("errorMessage");
 const retryButton = document.getElementById("retryButton");
 const newTabBtn = document.getElementById("newTabBtn");
+const reloadBtn = document.getElementById("reloadBtn");
 
 // State
 let currentUrl = "";
@@ -49,14 +50,24 @@ function saveConfigModeState(isConfig) {
     isConfigMode = isConfig;
 }
 
-// ========== UPDATE NEW TAB BUTTON STATE ==========
-function updateNewTabButton() {
+// ========== UPDATE BUTTONS STATE ==========
+function updateButtonsState() {
+    // Update New Tab button
     if (isConfigMode || !currentUrl || currentUrl === "about:blank") {
         newTabBtn.classList.add("disabled");
         newTabBtn.setAttribute("data-tooltip", "");
     } else {
         newTabBtn.classList.remove("disabled");
         newTabBtn.setAttribute("data-tooltip", "Open in new tab");
+    }
+    
+    // Update Reload button
+    if (isConfigMode || !currentUrl || currentUrl === "about:blank") {
+        reloadBtn.classList.add("disabled");
+        reloadBtn.setAttribute("data-tooltip", "");
+    } else {
+        reloadBtn.classList.remove("disabled");
+        reloadBtn.setAttribute("data-tooltip", "Reload");
     }
 }
 
@@ -67,6 +78,16 @@ function openInNewTab() {
     if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) return;
     
     chrome.tabs.create({ url: currentUrl, active: true });
+}
+
+// ========== RELOAD IFRAME ==========
+function reloadIframe() {
+    if (isConfigMode) return;
+    if (!currentUrl || currentUrl === "about:blank") return;
+    if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) return;
+    
+    // Reload by setting same src
+    frame.src = currentUrl;
 }
 
 // ========== BUILD DROPDOWN ==========
@@ -103,14 +124,14 @@ function loadUrlInFrame(url) {
     
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
         showError("Invalid URL format");
-        updateNewTabButton();
+        updateButtonsState();
         return;
     }
     
     currentUrl = url;
     hideError();
     showLoading();
-    updateNewTabButton();
+    updateButtonsState();
     
     let slowLoadWarningTimer = setTimeout(() => {
         const loadingText = document.querySelector(".loading-text");
@@ -123,7 +144,7 @@ function loadUrlInFrame(url) {
         clearTimeout(slowLoadWarningTimer);
         if (!loadingOverlay.classList.contains("hidden")) {
             showError("Connection timeout. The server is not responding. Check your internet connection or try again later.");
-            updateNewTabButton();
+            updateButtonsState();
         }
     }, LOAD_TIMEOUT_MS);
     
@@ -160,7 +181,7 @@ function hideError() {
 function onFrameLoad() {
     clearTimeout(loadTimeout);
     hideLoading();
-    updateNewTabButton();
+    updateButtonsState();
     
     const loadingText = document.querySelector(".loading-text");
     if (loadingText) loadingText.textContent = "Loading...";
@@ -173,7 +194,7 @@ function onFrameLoad() {
 function onFrameError() {
     clearTimeout(loadTimeout);
     hideLoading();
-    updateNewTabButton();
+    updateButtonsState();
     
     let errorMsg = "Failed to load the page.";
     
@@ -209,7 +230,7 @@ function showIframe(url) {
     
     loadUrlInFrame(url);
     select.value = url;
-    updateNewTabButton();
+    updateButtonsState();
 }
 
 // ========== SHOW CONFIGURATOR ==========
@@ -237,7 +258,7 @@ function showConfigurator() {
     saveConfigModeState(true);
     
     select.value = "__config__";
-    updateNewTabButton();
+    updateButtonsState();
     
     window.addEventListener("message", handleConfigMessage);
 }
@@ -302,7 +323,7 @@ async function closeConfigAndShowSite(siteUrl) {
     
     isConfigMode = false;
     saveConfigModeState(false);
-    updateNewTabButton();
+    updateButtonsState();
     window.addEventListener("message", handleConfigMessage);
 }
 
@@ -329,6 +350,12 @@ newTabBtn.addEventListener("click", () => {
     }
 });
 
+reloadBtn.addEventListener("click", () => {
+    if (!reloadBtn.classList.contains("disabled")) {
+        reloadIframe();
+    }
+});
+
 retryButton.addEventListener("click", () => {
     retryLoad();
 });
@@ -338,14 +365,14 @@ window.addEventListener("online", () => {
     if (!isConfigMode && frame.src === "about:blank") {
         retryLoad();
     }
-    updateNewTabButton();
+    updateButtonsState();
 });
 
 window.addEventListener("offline", () => {
     if (!isConfigMode) {
         showError("No internet connection. Please check your network and try again.");
     }
-    updateNewTabButton();
+    updateButtonsState();
 });
 
 frame.addEventListener("load", onFrameLoad);

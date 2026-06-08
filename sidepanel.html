@@ -101,8 +101,12 @@ body {
     border-bottom: 1px solid var(--border-toolbar);
     background: var(--bg-toolbar);
     display: flex;
-    gap: 6px;
+    gap: 0;
     align-items: center;
+}
+
+.new-tab-btn {
+    margin-left: 6px;
 }
 
 #siteSelect {
@@ -130,8 +134,8 @@ body {
     border-radius: var(--radius-select-option);
 }
 
-/* New Tab Button */
-.new-tab-btn {
+/* New Tab Button & Reload Button */
+.new-tab-btn, .reload-btn {
     width: 28px;
     height: 28px;
     background: transparent;
@@ -145,7 +149,7 @@ body {
     position: relative;
 }
 
-.new-tab-btn img {
+.new-tab-btn img, .reload-btn img {
     width: 16px;
     height: 16px;
     filter: var(--icon-filter);
@@ -153,27 +157,27 @@ body {
     transition: transform 0.2s, opacity 0.2s;
 }
 
-.new-tab-btn:hover img {
+.new-tab-btn:hover img, .reload-btn:hover img {
     transform: scale(1.1);
     opacity: 1;
 }
 
-.new-tab-btn.disabled {
+.new-tab-btn.disabled, .reload-btn.disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
 
-.new-tab-btn.disabled:hover img {
+.new-tab-btn.disabled:hover img, .reload-btn.disabled:hover img {
     transform: none;
     opacity: 0.7;
 }
 
 /* Custom Tooltip - BOTTOM position, shifted LEFT by 45px, no arrow */
-.new-tab-btn[data-tooltip] {
+.new-tab-btn[data-tooltip], .reload-btn[data-tooltip] {
     position: relative;
 }
 
-.new-tab-btn[data-tooltip]:hover::before {
+.new-tab-btn[data-tooltip]:hover::before, .reload-btn[data-tooltip]:hover::before {
     content: attr(data-tooltip);
     position: absolute;
     top: 130%;
@@ -192,7 +196,7 @@ body {
 }
 
 /* Disabled button - no tooltip */
-.new-tab-btn.disabled[data-tooltip]:hover::before {
+.new-tab-btn.disabled[data-tooltip]:hover::before, .reload-btn.disabled[data-tooltip]:hover::before {
     display: none;
 }
 
@@ -349,6 +353,9 @@ body {
     <select id="siteSelect"></select>
     <button class="new-tab-btn" id="newTabBtn" data-tooltip="Open in new tab">
         <img src="icons/link.svg" alt="Open in new tab">
+    </button>
+    <button class="reload-btn" id="reloadBtn" data-tooltip="Reload">
+        <img src="icons/reload.svg" alt="Reload">
     </button>
 </div>
 

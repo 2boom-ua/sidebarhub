@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Sidebar Hub",
-  "version": "1.2",
+  "version": "1.3",
   "description": "Customizable sidebar for quick access to your favorite websites",
   "permissions": [
     "sidePanel",
