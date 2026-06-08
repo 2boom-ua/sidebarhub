@@ -134,8 +134,8 @@ body {
     border-radius: var(--radius-select-option);
 }
 
-/* New Tab Button & Reload Button */
-.new-tab-btn, .reload-btn {
+/* New Tab Button & Reload Button & Options Button */
+.new-tab-btn, .reload-btn, .options-btn {
     width: 28px;
     height: 28px;
     background: transparent;
@@ -149,38 +149,38 @@ body {
     position: relative;
 }
 
-.new-tab-btn img, .reload-btn img {
+.new-tab-btn img, .reload-btn img, .options-btn img {
     width: 16px;
     height: 16px;
     filter: var(--icon-filter);
-    opacity: 0.7;
+    opacity: 0.5;
     transition: transform 0.2s, opacity 0.2s;
 }
 
-.new-tab-btn:hover img, .reload-btn:hover img {
+.new-tab-btn:hover img, .reload-btn:hover img, .options-btn:hover img {
     transform: scale(1.1);
-    opacity: 1;
+    opacity: 0.8;
 }
 
-.new-tab-btn.disabled, .reload-btn.disabled {
+.new-tab-btn.disabled, .reload-btn.disabled, .options-btn.disabled {
     opacity: 0.4;
     cursor: not-allowed;
 }
 
-.new-tab-btn.disabled:hover img, .reload-btn.disabled:hover img {
+.new-tab-btn.disabled:hover img, .reload-btn.disabled:hover img, .options-btn.disabled:hover img {
     transform: none;
     opacity: 0.7;
 }
 
 /* Custom Tooltip - BOTTOM position, shifted LEFT by 45px, no arrow */
-.new-tab-btn[data-tooltip], .reload-btn[data-tooltip] {
+.new-tab-btn[data-tooltip], .reload-btn[data-tooltip], .options-btn[data-tooltip] {
     position: relative;
 }
 
-.new-tab-btn[data-tooltip]:hover::before, .reload-btn[data-tooltip]:hover::before {
+.new-tab-btn[data-tooltip]:hover::before, .reload-btn[data-tooltip]:hover::before, .options-btn[data-tooltip]:hover::before {
     content: attr(data-tooltip);
     position: absolute;
-    top: 130%;
+    top: 125%;
     left: calc(50% - 45px);
     transform: translateX(-50%);
     background: var(--tooltip-bg);
@@ -196,7 +196,7 @@ body {
 }
 
 /* Disabled button - no tooltip */
-.new-tab-btn.disabled[data-tooltip]:hover::before, .reload-btn.disabled[data-tooltip]:hover::before {
+.new-tab-btn.disabled[data-tooltip]:hover::before, .reload-btn.disabled[data-tooltip]:hover::before, .options-btn.disabled[data-tooltip]:hover::before {
     display: none;
 }
 
@@ -356,6 +356,9 @@ body {
     </button>
     <button class="reload-btn" id="reloadBtn" data-tooltip="Reload">
         <img src="icons/reload.svg" alt="Reload">
+    </button>
+    <button class="options-btn" id="optionsBtn" data-tooltip="Options">
+        <img src="icons/options.svg" alt="Options">
     </button>
 </div>
 

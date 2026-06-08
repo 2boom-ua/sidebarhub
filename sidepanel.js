@@ -11,6 +11,7 @@ const errorMessage = document.getElementById("errorMessage");
 const retryButton = document.getElementById("retryButton");
 const newTabBtn = document.getElementById("newTabBtn");
 const reloadBtn = document.getElementById("reloadBtn");
+const optionsBtn = document.getElementById("optionsBtn");
 
 // State
 let currentUrl = "";
@@ -69,6 +70,15 @@ function updateButtonsState() {
         reloadBtn.classList.remove("disabled");
         reloadBtn.setAttribute("data-tooltip", "Reload");
     }
+    
+    // Update Options button - disabled when in config mode
+    if (isConfigMode) {
+        optionsBtn.classList.add("disabled");
+        optionsBtn.setAttribute("data-tooltip", "");
+    } else {
+        optionsBtn.classList.remove("disabled");
+        optionsBtn.setAttribute("data-tooltip", "Options");
+    }
 }
 
 // ========== OPEN CURRENT SITE IN NEW TAB ==========
@@ -86,11 +96,17 @@ function reloadIframe() {
     if (!currentUrl || currentUrl === "about:blank") return;
     if (!currentUrl.startsWith("http://") && !currentUrl.startsWith("https://")) return;
     
-    // Reload by setting same src
     frame.src = currentUrl;
 }
 
-// ========== BUILD DROPDOWN ==========
+// ========== SHOW OPTIONS ==========
+function showOptions() {
+    if (!isConfigMode) {
+        showConfigurator();
+    }
+}
+
+// ========== BUILD DROPDOWN (without separator and Options) ==========
 async function buildDropdown() {
     const sites = await loadSitesFromStorage();
     
@@ -102,18 +118,6 @@ async function buildDropdown() {
         option.textContent = site.name;
         select.appendChild(option);
     }
-    
-    if (sites.length > 0) {
-        const separator = document.createElement("option");
-        separator.disabled = true;
-        separator.textContent = "──────────";
-        select.appendChild(separator);
-    }
-    
-    const optionsOption = document.createElement("option");
-    optionsOption.value = "__config__";
-    optionsOption.textContent = "Options";
-    select.appendChild(optionsOption);
     
     return sites;
 }
@@ -257,7 +261,6 @@ function showConfigurator() {
     isConfigMode = true;
     saveConfigModeState(true);
     
-    select.value = "__config__";
     updateButtonsState();
     
     window.addEventListener("message", handleConfigMessage);
@@ -332,6 +335,7 @@ select.addEventListener("change", async () => {
     const selectedValue = select.value;
     
     if (selectedValue === "__config__") {
+        // This should not happen anymore, but keep for safety
         if (!isConfigMode) {
             showConfigurator();
         }
@@ -354,6 +358,10 @@ reloadBtn.addEventListener("click", () => {
     if (!reloadBtn.classList.contains("disabled")) {
         reloadIframe();
     }
+});
+
+optionsBtn.addEventListener("click", () => {
+    showOptions();
 });
 
 retryButton.addEventListener("click", () => {
