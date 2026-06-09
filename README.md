@@ -2,7 +2,7 @@
 
 A lightweight Chrome/Edge extension that lets you open your favorite websites in the browser's built-in side panel — keeping them accessible without taking up a tab.
 
-[![Version](https://img.shields.io/badge/version-1.3-green.svg)](https://github.com/yourusername/sidebarhub)
+[![Version](https://img.shields.io/badge/version-1.4-green.svg)](https://github.com/yourusername/sidebarhub)
 ![Manifest Version](https://img.shields.io/badge/Manifest-v3-blue)
 [![License](https://img.shields.io/badge/license-GPLv3-red.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
