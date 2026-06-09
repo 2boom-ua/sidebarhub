@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#1f1f1f"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="48px" height="48px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 1.997 1.997"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil0 {fill:none}
+    .fil1 {fill:#1F1F1F;fill-rule:nonzero}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <polygon class="fil0" points="0,0 1.997,0 1.997,1.997 0,1.997 "/>
+  <polygon class="fil1" points="1.174,0.208 1.174,0.384 1.489,0.384 0.991,0.882 1.107,1.014 1.613,0.508 1.613,0.823 1.789,0.823 1.789,0.208 "/>
+  <path class="fil1" d="M1.613 1.613l-1.229 0 0 -1.229 0.614 0 0 -0.176 -0.614 0c-0.098,0 -0.176,0.079 -0.176,0.176l0 1.229c0,0.097 0.078,0.176 0.176,0.176l1.229 0c0.097,0 0.176,-0.079 0.176,-0.176l0 -0.615 -0.176 0 0 0.615z"/>
+ </g>
+</svg>
