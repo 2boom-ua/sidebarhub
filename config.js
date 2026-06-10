@@ -24,6 +24,7 @@ const STORAGE_LAST_SITE = "lastSite";
 
 // State
 let sites = [];
+let dragStartIndex = null;
 
 // ========== LOAD SITES ==========
 async function loadSites() {
@@ -329,6 +330,35 @@ function onFileSelected(event) {
     fileInput.value = "";
 }
 
+// ========== DRAG & DROP ==========
+function onDragStart(event, index) {
+    dragStartIndex = index;
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", index);
+}
+
+function onDragOver(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+}
+
+function onDrop(event, dropIndex) {
+    event.preventDefault();
+    
+    if (dragStartIndex === null || dragStartIndex === dropIndex) return;
+    
+    const item = sites[dragStartIndex];
+    sites.splice(dragStartIndex, 1);
+    sites.splice(dropIndex, 0, item);
+    
+    dragStartIndex = null;
+    saveSites();
+}
+
+function onDragEnd() {
+    dragStartIndex = null;
+}
+
 // ========== RENDER SITES LIST ==========
 function renderSitesList() {
     if (sites.length === 0) {
@@ -341,17 +371,41 @@ function renderSitesList() {
     sites.forEach((site, index) => {
         const siteDiv = document.createElement("div");
         siteDiv.className = "site-item";
+        siteDiv.setAttribute("data-index", index);
         
-        siteDiv.innerHTML = `
-            <div class="site-info">
-                <div class="site-name">${escapeHtml(site.name)}</div>
-                <div class="site-url">${escapeHtml(site.url)}</div>
-            </div>
-            <div class="site-actions">
-                <button class="edit-btn" data-index="${index}">Edit</button>
-                <button class="delete-btn" data-index="${index}">Delete</button>
-            </div>
+        // Drag handle
+        const dragHandle = document.createElement("div");
+        dragHandle.className = "drag-handle";
+        dragHandle.setAttribute("draggable", "true");
+        dragHandle.setAttribute("data-index", index);
+        dragHandle.innerHTML = `<img src="icons/handle.svg" alt="drag">`;
+        
+        dragHandle.addEventListener("dragstart", (e) => onDragStart(e, index));
+        dragHandle.addEventListener("dragend", onDragEnd);
+        
+        // Site info
+        const siteInfo = document.createElement("div");
+        siteInfo.className = "site-info";
+        siteInfo.innerHTML = `
+            <div class="site-name">${escapeHtml(site.name)}</div>
+            <div class="site-url">${escapeHtml(site.url)}</div>
         `;
+        
+        // Action buttons
+        const siteActions = document.createElement("div");
+        siteActions.className = "site-actions";
+        siteActions.innerHTML = `
+            <button class="edit-btn" data-index="${index}">Edit</button>
+            <button class="delete-btn" data-index="${index}">Delete</button>
+        `;
+        
+        siteDiv.appendChild(dragHandle);
+        siteDiv.appendChild(siteInfo);
+        siteDiv.appendChild(siteActions);
+        
+        // Drag & drop events on the whole item
+        siteDiv.addEventListener("dragover", onDragOver);
+        siteDiv.addEventListener("drop", (e) => onDrop(e, index));
         
         sitesContainer.appendChild(siteDiv);
     });

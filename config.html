@@ -36,6 +36,9 @@
     --btn-orange: #fdba74;
     --btn-orange-hover: #fb923c;
     
+    /* Icon filter - light theme (black icon) */
+    --icon-filter: brightness(0) saturate(100%) invert(0%);
+    
     /* Tooltip */
     --tooltip-bg: #ffffff;
     --tooltip-text: #333333;
@@ -70,6 +73,9 @@
         --btn-orange: #fdba74;
         --btn-orange-hover: #fb923c;
         
+        /* Icon filter - dark theme (white icon) */
+        --icon-filter: brightness(0) saturate(100%) invert(100%);
+        
         /* Tooltip */
         --tooltip-bg: #555555;
         --tooltip-text: #ffffff;
@@ -89,22 +95,23 @@ body {
     color: var(--text-primary);
     height: 100%;
     overflow-y: auto;
+    font-size: 13px;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border-card);
 }
 
-h2 {
+.header strong {
     margin: 0;
-    font-size: 14px;
-    font-weight: normal;
-    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--text-primary);
 }
 
 .close-btn {
@@ -114,7 +121,7 @@ h2 {
     padding: 6px 12px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .close-btn:hover {
@@ -131,7 +138,9 @@ h2 {
 
 .add-form h3 {
     margin: 0 0 12px 0;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-primary);
 }
 
 .form-group {
@@ -141,7 +150,7 @@ h2 {
 .form-group label {
     display: block;
     margin-bottom: 4px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-secondary);
 }
 
@@ -152,7 +161,7 @@ h2 {
     background: var(--bg-input);
     color: var(--text-primary);
     border-radius: var(--radius-input);
-    font-size: 12px;
+    font-size: 13px;
     outline: none;
 }
 
@@ -168,7 +177,7 @@ h2 {
     padding: 8px 16px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     width: 100%;
 }
 
@@ -177,12 +186,15 @@ h2 {
 }
 
 .sites-list {
-    margin-bottom: 24px;
+    margin-bottom: 0;
 }
 
-.sites-list h3 {
-    margin: 0 0 12px 0;
-    font-size: 13px;
+.sites-list strong {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: block;
 }
 
 .empty-message {
@@ -192,9 +204,10 @@ h2 {
     background: var(--bg-card);
     border-radius: var(--radius-card);
     border: 1px solid var(--border-card);
-    font-size: 12px;
+    font-size: 13px;
 }
 
+/* Site item with drag handle */
 .site-item {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
@@ -202,9 +215,40 @@ h2 {
     padding: 12px;
     margin-bottom: 8px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 12px;
+}
+
+.site-item:last-child {
+    margin-bottom: 12px;
+}
+
+.drag-handle {
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    opacity: 0.4;
+    transition: opacity 0.2s;
+}
+
+.drag-handle:hover {
+    opacity: 0.8;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.drag-handle img {
+    width: 16px;
+    height: 16px;
+    filter: var(--icon-filter);
+    pointer-events: none;
+}
+
+.drag-over {
+    border-top: 2px solid var(--btn-blue);
+    margin-top: -1px;
 }
 
 .site-info {
@@ -214,12 +258,12 @@ h2 {
 
 .site-name {
     font-weight: bold;
-    font-size: 13px;
+    font-size: 14px;
     margin-bottom: 4px;
 }
 
 .site-url {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -234,10 +278,10 @@ h2 {
 .edit-btn {
     background: var(--btn-green);
     border: none;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     color: white;
 }
 
@@ -248,10 +292,10 @@ h2 {
 .delete-btn {
     background: var(--btn-red);
     border: none;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     color: white;
 }
 
@@ -260,19 +304,18 @@ h2 {
 }
 
 .danger-zone {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-card);
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .clear-all-btn {
     background: var(--btn-red);
     border: none;
     color: white;
-    padding: 8px 16px;
+    padding: 9px 16px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     width: 100%;
 }
 
@@ -281,14 +324,16 @@ h2 {
 }
 
 .backup-section {
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-card);
+    margin-top: 20px;
+    padding-top: 0;
 }
 
-.backup-section h3 {
-    margin: 0 0 12px 0;
-    font-size: 13px;
+.backup-section strong {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-primary);
+    display: block;
 }
 
 .backup-buttons {
@@ -300,10 +345,10 @@ h2 {
     background: var(--btn-green);
     border: none;
     color: white;
-    padding: 8px 16px;
+    padding: 9px 16px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     flex: 1;
 }
 
@@ -315,10 +360,10 @@ h2 {
     background: var(--btn-blue);
     border: none;
     color: white;
-    padding: 8px 16px;
+    padding: 9px 16px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     flex: 1;
 }
 
@@ -376,7 +421,7 @@ h2 {
 
 .modal-content p {
     margin: 0 0 16px 0;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .modal-buttons {
@@ -386,10 +431,10 @@ h2 {
 }
 
 .modal-buttons button {
-    padding: 6px 16px;
+    padding: 7px 18px;
     border-radius: var(--radius-button);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .modal-confirm {
@@ -420,9 +465,9 @@ h2 {
     background: var(--bg-card);
     border: 1px solid var(--border-card);
     color: var(--text-primary);
-    padding: 8px 16px;
+    padding: 10px 18px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 12px;
     z-index: 1001;
     animation: fadeOut 2s ease forwards;
 }
@@ -465,7 +510,7 @@ h2 {
 <body>
 
 <div class="header">
-    <h2>Site Manager</h2>
+    <strong>Site Manager</strong>
     <button class="close-btn" id="closeBtn">Close</button>
 </div>
 
@@ -483,7 +528,7 @@ h2 {
 </div>
 
 <div class="sites-list">
-    <h3>Your Sites</h3>
+    <strong>Your Sites</strong>
     <div id="sitesContainer"></div>
 </div>
 
@@ -492,7 +537,7 @@ h2 {
 </div>
 
 <div class="backup-section">
-    <h3>Export & Import Settings</h3>
+    <strong>Export & Import Settings</strong>
     <div class="backup-buttons">
         <button class="export-btn" id="exportBtn">Export</button>
         <button class="import-btn" id="importBtn">Import</button>
