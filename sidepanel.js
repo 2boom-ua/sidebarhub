@@ -106,7 +106,7 @@ function showOptions() {
     }
 }
 
-// ========== BUILD DROPDOWN (without separator and Options) ==========
+// ========== BUILD DROPDOWN ==========
 async function buildDropdown() {
     const sites = await loadSitesFromStorage();
     
@@ -335,7 +335,6 @@ select.addEventListener("change", async () => {
     const selectedValue = select.value;
     
     if (selectedValue === "__config__") {
-        // This should not happen anymore, but keep for safety
         if (!isConfigMode) {
             showConfigurator();
         }
