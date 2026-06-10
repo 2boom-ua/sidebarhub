@@ -78,6 +78,7 @@ sidebar-hub/
     └── link.svg
     └── reload.svg
     └── options.svg
+    └── handle.svg
 ```
 
 ---
