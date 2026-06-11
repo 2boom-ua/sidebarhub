@@ -4,6 +4,7 @@
 // DOM elements
 const select = document.getElementById("siteSelect");
 const frame = document.getElementById("frame");
+const iframeWrapper = document.getElementById("iframeWrapper");
 const contentContainer = document.getElementById("contentContainer");
 const loadingOverlay = document.getElementById("loadingOverlay");
 const errorOverlay = document.getElementById("errorOverlay");
@@ -12,21 +13,75 @@ const retryButton = document.getElementById("retryButton");
 const newTabBtn = document.getElementById("newTabBtn");
 const reloadBtn = document.getElementById("reloadBtn");
 const optionsBtn = document.getElementById("optionsBtn");
+const zoomOutBtn = document.getElementById("zoomOutBtn");
+const zoomResetBtn = document.getElementById("zoomResetBtn");
+const zoomInBtn = document.getElementById("zoomInBtn");
 
 // State
 let currentUrl = "";
 let isConfigMode = false;
 let configIframe = null;
 let loadTimeout = null;
+let zoomLevel = 100;
 
 // Storage keys
 const STORAGE_SITES = "userSites";
 const STORAGE_LAST_SITE = "lastSite";
 const STORAGE_CONFIG_MODE = "isConfigMode";
+const STORAGE_ZOOM_LEVEL = "zoomLevel";
 
 // Constants
 const LOAD_TIMEOUT_MS = 15000;
 const SLOW_LOAD_WARNING_MS = 5000;
+const ZOOM_MIN = 50;
+const ZOOM_MAX = 250;
+const ZOOM_STEP = 10;
+
+// ========== ZOOM FUNCTIONS ==========
+function applyZoom() {
+    const zoom = zoomLevel / 100;
+    
+    frame.style.transform = `scale(${zoom})`;
+    frame.style.width = `${100 / zoom}%`;
+    frame.style.height = `${100 / zoom}%`;
+    
+    const percentSpan = zoomResetBtn.querySelector(".zoom-percent");
+    if (percentSpan) {
+        percentSpan.textContent = `${zoomLevel}%`;
+    }
+    
+    // Update button states
+    zoomOutBtn.classList.toggle("disabled", zoomLevel <= ZOOM_MIN);
+    zoomInBtn.classList.toggle("disabled", zoomLevel >= ZOOM_MAX);
+}
+
+function saveZoomLevel() {
+    chrome.storage.local.set({ [STORAGE_ZOOM_LEVEL]: zoomLevel });
+}
+
+function zoomIn() {
+    if (zoomLevel < ZOOM_MAX) {
+        zoomLevel += ZOOM_STEP;
+        if (zoomLevel > ZOOM_MAX) zoomLevel = ZOOM_MAX;
+        saveZoomLevel();
+        applyZoom();
+    }
+}
+
+function zoomOut() {
+    if (zoomLevel > ZOOM_MIN) {
+        zoomLevel -= ZOOM_STEP;
+        if (zoomLevel < ZOOM_MIN) zoomLevel = ZOOM_MIN;
+        saveZoomLevel();
+        applyZoom();
+    }
+}
+
+function resetZoom() {
+    zoomLevel = 100;
+    saveZoomLevel();
+    applyZoom();
+}
 
 // ========== LOAD SITES FROM STORAGE ==========
 async function loadSitesFromStorage() {
@@ -78,6 +133,23 @@ function updateButtonsState() {
     } else {
         optionsBtn.classList.remove("disabled");
         optionsBtn.setAttribute("data-tooltip", "Options");
+    }
+    
+    // Update Zoom buttons - disabled when in config mode
+    if (isConfigMode) {
+        zoomOutBtn.classList.add("disabled");
+        zoomResetBtn.classList.add("disabled");
+        zoomInBtn.classList.add("disabled");
+        zoomOutBtn.setAttribute("data-tooltip", "");
+        zoomResetBtn.setAttribute("data-tooltip", "");
+        zoomInBtn.setAttribute("data-tooltip", "");
+    } else {
+        zoomOutBtn.classList.toggle("disabled", zoomLevel <= ZOOM_MIN);
+        zoomResetBtn.classList.remove("disabled");
+        zoomInBtn.classList.toggle("disabled", zoomLevel >= ZOOM_MAX);
+        zoomOutBtn.setAttribute("data-tooltip", "Zoom out");
+        zoomResetBtn.setAttribute("data-tooltip", "Reset zoom (click)");
+        zoomInBtn.setAttribute("data-tooltip", "Zoom in");
     }
 }
 
@@ -229,6 +301,7 @@ function showIframe(url) {
     }
     
     frame.style.display = "block";
+    iframeWrapper.style.display = "block";
     isConfigMode = false;
     saveConfigModeState(false);
     
@@ -240,6 +313,7 @@ function showIframe(url) {
 // ========== SHOW CONFIGURATOR ==========
 function showConfigurator() {
     frame.style.display = "none";
+    iframeWrapper.style.display = "none";
     frame.src = "about:blank";
     hideLoading();
     hideError();
@@ -310,6 +384,7 @@ async function closeConfigAndShowSite(siteUrl) {
     }
     
     frame.style.display = "block";
+    iframeWrapper.style.display = "block";
     
     if (siteUrl) {
         const sites = await loadSitesFromStorage();
@@ -363,6 +438,24 @@ optionsBtn.addEventListener("click", () => {
     showOptions();
 });
 
+zoomOutBtn.addEventListener("click", () => {
+    if (!zoomOutBtn.classList.contains("disabled")) {
+        zoomOut();
+    }
+});
+
+zoomResetBtn.addEventListener("click", () => {
+    if (!zoomResetBtn.classList.contains("disabled")) {
+        resetZoom();
+    }
+});
+
+zoomInBtn.addEventListener("click", () => {
+    if (!zoomInBtn.classList.contains("disabled")) {
+        zoomIn();
+    }
+});
+
 retryButton.addEventListener("click", () => {
     retryLoad();
 });
@@ -387,6 +480,15 @@ frame.addEventListener("error", onFrameError);
 
 // ========== RESTORE STATE ON LOAD ==========
 async function restoreState() {
+    // Load zoom level
+    await new Promise((resolve) => {
+        chrome.storage.local.get([STORAGE_ZOOM_LEVEL], (result) => {
+            zoomLevel = result[STORAGE_ZOOM_LEVEL] || 100;
+            applyZoom();
+            resolve();
+        });
+    });
+    
     const sites = await buildDropdown();
     
     chrome.storage.local.get([STORAGE_CONFIG_MODE, STORAGE_LAST_SITE], async (result) => {
