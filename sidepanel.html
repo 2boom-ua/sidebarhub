@@ -101,7 +101,7 @@ body {
     border-bottom: 1px solid var(--border-toolbar);
     background: var(--bg-toolbar);
     display: flex;
-    gap: 0;
+    gap: -2px;
     align-items: center;
 }
 
@@ -426,6 +426,18 @@ body {
         scrollbar-width: thin;
         scrollbar-color: #555555 #2b2b2b;
     }
+}
+
+.reload-btn {
+    margin-right: -5px;   /* ← відступ після reload */
+}
+
+.zoom-out-btn {
+    margin-right: -5px;   /* ← відступ після zoom-out */
+}
+
+.options-btn {
+    margin-left: -5px;
 }
 </style>
 </head>
