@@ -79,6 +79,8 @@ sidebar-hub/
     └── reload.svg
     └── options.svg
     └── handle.svg
+    └── zoom-in.svg
+    └── zoom-out.svg
 ```
 
 ---
