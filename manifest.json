@@ -3,6 +3,7 @@
   "name": "Sidebar Hub",
   "version": "1.7",
   "description": "Sidebar with quick links",
+  "author": "(c) 2boom 2026",
   "permissions": [
     "sidePanel",
     "storage"
