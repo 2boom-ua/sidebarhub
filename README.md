@@ -7,6 +7,10 @@ A lightweight Chrome/Edge extension that lets you open your favorite websites in
 [![License](https://img.shields.io/badge/license-GPLv3-red.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
+<div align="center">  
+    <img src="https://github.com/2boom-ua/sidebarhub/blob/main/screenshot.png?raw=true" alt="" width="800" height="489">
+</div>
+
 
 ## Features
 
