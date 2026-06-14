@@ -8,7 +8,7 @@ A lightweight Chrome/Edge extension that lets you open your favorite websites in
 
 ---
 <div align="center">  
-    <img src="https://github.com/2boom-ua/sidebarhub/blob/main/screenshot.png?raw=true" alt="" width="800" height="489">
+    <img src="https://github.com/2boom-ua/sidebarhub/blob/main/screenshot.png?raw=true" alt="" width="600" height="367">
 </div>
 
 
